@@ -42,8 +42,8 @@ def generate_page(from_path, template_path, dest_path, basepath):
     title = extract_title(markdown_content)
     template = template.replace("{{ Title }}", title)
     template = template.replace("{{ Content }}", html)
-    template = template.replace('href="/', f'href="{basepath}')
-    template = template.replace('src="/', f'src="{basepath}')
+    template = template.replace('href="/', 'href="' + basepath)
+    template = template.replace('src="/', 'src="' + basepath)
 
     dest_dir_path = os.path.dirname(dest_path)
     if dest_dir_path != "":
@@ -66,10 +66,13 @@ dir_path_public = "./public"
 dir_path_docs = "./docs"
 dir_path_content = "./content"
 template_path = "./template.html"
+default_basepath = "/"
 
 
 def main():
-    basepath = sys.argv[0]
+    basepath = default_basepath
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
     print("Deleting docs directory...")
     if os.path.exists(dir_path_docs):
         shutil.rmtree(dir_path_docs)
